@@ -550,6 +550,11 @@ const initChalkboard = function ( Reveal ) {
 		try {
 			var data = JSON.parse( json );
 			for ( var id = 0; id < data.length; id++ ) {
+				if ( drawingCanvas[ id ].width != data[ id ].width || drawingCanvas[ id ].height != data[ id ].height ) {
+					drawingCanvas[ id ].scale = Math.max( Reveal.getConfig().minScale, Math.min( drawingCanvas[ id ].width / data[ id ].width, drawingCanvas[ id ].height / data[ id ].height, Reveal.getConfig().maxScale ));
+					drawingCanvas[ id ].xOffset = ( drawingCanvas[ id ].width - data[ id ].width * drawingCanvas[ id ].scale ) / 2;
+					drawingCanvas[ id ].yOffset = ( drawingCanvas[ id ].height - data[ id ].height * drawingCanvas[ id ].scale ) / 2;
+				}
 				if ( config.readOnly ) {
 					drawingCanvas[ id ].container.style.cursor = 'default';
 					drawingCanvas[ id ].canvas.style.cursor = 'default';
@@ -808,7 +813,7 @@ const initChalkboard = function ( Reveal ) {
 		var xOffset = 0;
 		var yOffset = 0;
 		if ( width != storage[ 1 ].width || height != storage[ 1 ].height ) {
-			scale = Math.min( width / storage[ 1 ].width, height / storage[ 1 ].height );
+			scale = Math.max( Reveal.getConfig().minScale, Math.min( width / storage[ 1 ].width, height / storage[ 1 ].height, Reveal.getConfig().maxScale ));
 			xOffset = ( width - storage[ 1 ].width * scale ) / 2;
 			yOffset = ( height - storage[ 1 ].height * scale ) / 2;
 		}
@@ -974,7 +979,7 @@ const initChalkboard = function ( Reveal ) {
 	function drawGrid() {
 		var context = drawingCanvas[ 1 ].context;
 
-		drawingCanvas[ 1 ].scale = Math.min( drawingCanvas[ 1 ].width / storage[ 1 ].width, drawingCanvas[ 1 ].height / storage[ 1 ].height );
+		drawingCanvas[ 1 ].scale = Math.max( Reveal.getConfig().minScale, Math.min( drawingCanvas[ 1 ].width / storage[ 1 ].width, drawingCanvas[ 1 ].height / storage[ 1 ].height, Reveal.getConfig().maxScale ));
 		drawingCanvas[ 1 ].xOffset = ( drawingCanvas[ 1 ].width - storage[ 1 ].width * drawingCanvas[ 1 ].scale ) / 2;
 		drawingCanvas[ 1 ].yOffset = ( drawingCanvas[ 1 ].height - storage[ 1 ].height * drawingCanvas[ 1 ].scale ) / 2;
 
@@ -1012,7 +1017,7 @@ const initChalkboard = function ( Reveal ) {
 	function redrawGrid( centerX, centerY, diameter ) {
 		var context = drawingCanvas[ 1 ].context;
 
-		drawingCanvas[ 1 ].scale = Math.min( drawingCanvas[ 1 ].width / storage[ 1 ].width, drawingCanvas[ 1 ].height / storage[ 1 ].height );
+		drawingCanvas[ 1 ].scale = Math.max( Reveal.getConfig().minScale, Math.min( drawingCanvas[ 1 ].width / storage[ id ].width, drawingCanvas[ id ].height / storage[ 1 ].height, Reveal.getConfig().maxScale ));
 		drawingCanvas[ 1 ].xOffset = ( drawingCanvas[ 1 ].width - storage[ 1 ].width * drawingCanvas[ 1 ].scale ) / 2;
 		drawingCanvas[ 1 ].yOffset = ( drawingCanvas[ 1 ].height - storage[ 1 ].height * drawingCanvas[ 1 ].scale ) / 2;
 
@@ -1170,7 +1175,7 @@ const initChalkboard = function ( Reveal ) {
 		case 'init':
 			storage = message.content.storage;
 			for ( var id = 0; id < 2; id++ ) {
-				drawingCanvas[ id ].scale = Math.min( drawingCanvas[ id ].width / storage[ id ].width, drawingCanvas[ id ].height / storage[ id ].height );
+				drawingCanvas[ id ].scale = Math.max( Reveal.getConfig().minScale, Math.min( drawingCanvas[ id ].width / storage[ id ].width, drawingCanvas[ id ].height / storage[ id ].height, Reveal.getConfig().maxScale ));
 				drawingCanvas[ id ].xOffset = ( drawingCanvas[ id ].width - storage[ id ].width * drawingCanvas[ id ].scale ) / 2;
 				drawingCanvas[ id ].yOffset = ( drawingCanvas[ id ].height - storage[ id ].height * drawingCanvas[ id ].scale ) / 2;
 			}
@@ -1632,7 +1637,7 @@ const initChalkboard = function ( Reveal ) {
 			drawingCanvas[ id ].context.canvas.width = drawingCanvas[ id ].width;
 			drawingCanvas[ id ].context.canvas.height = drawingCanvas[ id ].height;
 
-			drawingCanvas[ id ].scale = Math.min( drawingCanvas[ id ].width / storage[ id ].width, drawingCanvas[ id ].height / storage[ id ].height );
+			drawingCanvas[ id ].scale = Math.max( Reveal.getConfig().minScale, Math.min( drawingCanvas[ id ].width / storage[ id ].width, drawingCanvas[ id ].height / storage[ id ].height, Reveal.getConfig().maxScale ));
 			drawingCanvas[ id ].xOffset = ( drawingCanvas[ id ].width - storage[ id ].width * drawingCanvas[ id ].scale ) / 2;
 			drawingCanvas[ id ].yOffset = ( drawingCanvas[ id ].height - storage[ id ].height * drawingCanvas[ id ].scale ) / 2;
 //console.log( drawingCanvas[id].scale + "/" + drawingCanvas[id].xOffset + "/" +drawingCanvas[id].yOffset );
