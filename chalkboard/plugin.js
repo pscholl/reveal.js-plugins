@@ -531,7 +531,10 @@ const initChalkboard = function ( Reveal ) {
 
 	if ( config.storage ) {
 		// Get chalkboard drawings from session storage
-		loaded = initStorage( sessionStorage.getItem( config.storage ) );
+		//loaded = initStorage( sessionStorage.getItem( config.storage ) );
+		var name = "_".concat( config.storage, window.location );
+		loaded = initStorage( localStorage.getItem( name ) );
+
 	}
 
 	if ( !loaded && config.src != null ) {
@@ -547,11 +550,6 @@ const initChalkboard = function ( Reveal ) {
 		try {
 			var data = JSON.parse( json );
 			for ( var id = 0; id < data.length; id++ ) {
-				if ( drawingCanvas[ id ].width != data[ id ].width || drawingCanvas[ id ].height != data[ id ].height ) {
-					drawingCanvas[ id ].scale = Math.min( drawingCanvas[ id ].width / data[ id ].width, drawingCanvas[ id ].height / data[ id ].height );
-					drawingCanvas[ id ].xOffset = ( drawingCanvas[ id ].width - data[ id ].width * drawingCanvas[ id ].scale ) / 2;
-					drawingCanvas[ id ].yOffset = ( drawingCanvas[ id ].height - data[ id ].height * drawingCanvas[ id ].scale ) / 2;
-				}
 				if ( config.readOnly ) {
 					drawingCanvas[ id ].container.style.cursor = 'default';
 					drawingCanvas[ id ].canvas.style.cursor = 'default';
@@ -614,7 +612,8 @@ const initChalkboard = function ( Reveal ) {
 	function updateStorage() {
 		var json = JSON.stringify( storage )
 		if ( config.storage ) {
-			sessionStorage.setItem( config.storage, json )
+			var name = "_".concat( config.storage, window.location );
+			localStorage.setItem( name, json )
 		}
 		return json;
 	}
@@ -1924,7 +1923,8 @@ const initChalkboard = function ( Reveal ) {
 			];
 
 			if ( config.storage ) {
-				sessionStorage.setItem( config.storage, null )
+				var name = "_".concat( config.storage, window.location );
+				localStorage.setItem( name, null )
 			}
 			// broadcast
 			var message = new CustomEvent( messageType );
